@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+/* 
+::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+} */
+
+
+.text-white{
+    color: white;
+}
+
+body {
+    /* overflow: hidden; */
+    background: black;
+    font-family: Arial, sans-serif;    
+    width: 100%;
+    height: 100vh;
+}
+
+#scenes-wrapper{
+    width: 100%;
+    height: 100vh;
+}
+
+
+#scene-1 , #scene-2{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+#main-text {
+    font-size: 3rem;
+}
+
+#scene-1 > #scroll-indicator{
+    position: absolute;
+    font-size: 1rem;
+    color: rgb(26, 113, 218);
+    top:90%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+#scene-1 {
+    z-index: 2; 
+}
+
+#scene-2 {
+    opacity: 0; 
+    z-index: 1;
+}
+
+
+#scroll-space{
+    width: 100%;
+    height: 200vh;
+}
