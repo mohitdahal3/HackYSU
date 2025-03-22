@@ -1,6 +1,33 @@
 import * as THREE from 'three'
 
 
+const audio = new Audio('Super_Nova.mp3');
+      audio.preload = 'auto';
+      const mainText = document.getElementById('btn');
+
+      audio.play()
+        .then(() => {
+          mainText.classList.add('playing');
+          addClickListener();
+        })
+        .catch(error =>{
+          console.error("Autoplay failed:", error);
+          addClickListener();
+        });
+
+    function addClickListener(){
+      mainText.addEventListener('click', function(){
+        if (audio.paused){
+          audio.play();
+          mainText.classList.add('playing');
+        }else{
+          audio.pause();
+          audio.currentTime = 0;
+          mainText.classList.remove('playing');
+        }
+      });
+    }
+
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollSmoother);
