@@ -82,15 +82,15 @@ nebulaSceneRenderer.setAnimationLoop( animate );
 
 
 
-const particleCount = 1000;
+const particleCount = 5000;
 const nebulaGroup = new THREE.Group(); // Group for better control
 
 for (let i = 0; i < particleCount; i++) {
     // Create a small sphere
-    const particleGeometry = new THREE.SphereGeometry(0.005, 8, 8); // Tiny spheres
+    const particleGeometry = new THREE.SphereGeometry(0.01, 8, 8); // Tiny spheres
     const particleMaterial = new THREE.MeshStandardMaterial({
         emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
-        emissiveIntensity: 0.6, // Slightly stronger glow for effect
+        emissiveIntensity: 0.9, // Slightly stronger glow for effect
         color: 0x442211, // Darker reddish-brown base
         transparent: true,
         opacity: 0.8
@@ -99,10 +99,13 @@ for (let i = 0; i < particleCount; i++) {
     const particle = new THREE.Mesh(particleGeometry, particleMaterial);
 
     // Randomly position the particles
+    let radius = Math.random() * 5
+    let theta = Math.random() * 2 * Math.PI
+    let phi = Math.random() * 2 * Math.PI
     particle.position.set(
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10,
-        (Math.random() - 0.5) * 10
+        radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.sin(phi) * Math.sin(theta),
+        (radius * Math.cos(phi))
     );
 
     nebulaGroup.add(particle);
@@ -115,20 +118,56 @@ const light = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
 light.position.set(0, 0, 3);
 nebulaScene.add(light);
 
-nebulaSceneCamera.position.z = 5;
+nebulaSceneCamera.position.z = 0;
+nebulaSceneCamera.position.x = 0;
+nebulaSceneCamera.position.y = 0;
+
+
+let nebulaRotationSpeed = {
+    x : 0.001,
+    y : 0.0007
+}
 
 function animate() {
 
     // Rotate slowly
-    nebulaGroup.rotation.y += 0.0005;
-    nebulaGroup.rotation.x += 0.0003;
+    nebulaGroup.rotation.y += nebulaRotationSpeed.y;
+    nebulaGroup.rotation.x += nebulaRotationSpeed.x;
 
     // Slightly move particles up and down
-    nebulaGroup.children.forEach(particle => {
-        particle.position.y += Math.sin(Date.now() * 0.0001 + particle.position.x) * 0.002;
-    });
+    // nebulaGroup.children.forEach(particle => {
+    //     particle.position.y += Math.sin(Date.now() * 0.0001 + particle.position.x) * 0.002;
+    // });
 
 
 	nebulaSceneRenderer.render( nebulaScene, nebulaSceneCamera );
 
 }
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-2",
+        start: "top top",
+        markers:true,
+        end: "bottom top",
+        pin:true,
+        scrub: 1
+    }
+})
+.to(nebulaGroup.scale, {
+    x: 0.2, // Shrinking effect
+    y: 0.2,
+    z: 0.2,
+    duration: 3,
+    ease: "power2.inOut"
+})
+.to(nebulaSceneCamera.position , {
+    z:2,
+    duration: 3,
+    ease: "linear"
+})
+.to(nebulaRotationSpeed , {
+    x : 0.0001,
+    y : 0.0001
+})
