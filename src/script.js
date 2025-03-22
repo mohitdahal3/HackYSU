@@ -52,7 +52,7 @@ scrollIndicatorTimeline.to(initialScrollIndicator, {
 
 gsap.timeline({
     scrollTrigger: {
-        trigger: "#scenes-wrapper",
+        trigger: "#initial-scenes-wrapper",
         pin:true,
         start: "top top",
         end: "bottom top",
@@ -72,13 +72,13 @@ gsap.timeline({
 
 
 const nebulaScene = new THREE.Scene();
-const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.3 , 1000 );
+const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
 
 const nebulaSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("nebula-canvas") });
 
 
-nebulaSceneRenderer.setSize( window.innerWidth, window.innerHeight );
-nebulaSceneRenderer.setAnimationLoop( animate );
+nebulaSceneRenderer.setSize( window.innerWidth, window.innerHeight);
+nebulaSceneRenderer.setAnimationLoop( nebulaSceneAnimate );
 
 
 
@@ -87,7 +87,7 @@ const nebulaGroup = new THREE.Group(); // Group for better control
 
 for (let i = 0; i < particleCount; i++) {
     // Create a small sphere
-    const particleGeometry = new THREE.SphereGeometry(0.01, 8, 8); // Tiny spheres
+    const particleGeometry = new THREE.SphereGeometry(0.005, 10, 10); // Tiny spheres
     const particleMaterial = new THREE.MeshStandardMaterial({
         emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
         emissiveIntensity: 0.9, // Slightly stronger glow for effect
@@ -111,23 +111,14 @@ for (let i = 0; i < particleCount; i++) {
     nebulaGroup.add(particle);
 }
 
-const starGeometry = new THREE.SphereGeometry(5 * 0.2, 30, 30); 
-const starMaterial = new THREE.MeshStandardMaterial({
-    emissive: new THREE.Color(0xAA5533),
-    emissiveIntensity: 0.9, 
-    color: 0x442211, 
-    opacity: 0
-});
-const initialStar = new THREE.Mesh(starGeometry , starMaterial)
-
-nebulaScene.add(nebulaGroup , initialStar);
+nebulaScene.add(nebulaGroup);
 
 
 const light = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
 light.position.set(0, 0, 4);
 nebulaScene.add(light);
 
-nebulaSceneCamera.position.z = 0;
+nebulaSceneCamera.position.z = 1;
 
 
 let nebulaRotationSpeed = {
@@ -136,60 +127,50 @@ let nebulaRotationSpeed = {
     z : 0,
 }
 
-function animate() {
+function nebulaSceneAnimate() {
 
     // Rotate slowly
     nebulaGroup.rotation.y += nebulaRotationSpeed.y;
     nebulaGroup.rotation.x += nebulaRotationSpeed.x;
     nebulaGroup.rotation.z += nebulaRotationSpeed.z;
-    
-    initialStar.rotation.y += nebulaRotationSpeed.y;
-    initialStar.rotation.x += nebulaRotationSpeed.x;
-    initialStar.rotation.z += nebulaRotationSpeed.z;
-    
-
-    // Slightly move particles up and down
-    // nebulaGroup.children.forEach(particle => {
-    //     particle.position.y += Math.sin(Date.now() * 0.0001 + particle.position.x) * 0.002;
-    // });
-
 
 	nebulaSceneRenderer.render( nebulaScene, nebulaSceneCamera );
 
 }
 
+splitText("#scene-3 > h1")
+const scene3Chars = document.querySelectorAll("#scene-3 > h1 > .char")
+
 
 gsap.timeline({
     scrollTrigger: {
-        trigger: "#scene-2",
+        trigger: "#scene-3",
         start: "top top",
-        markers:true,
         end: "bottom top",
-        pin:true,
-        scrub: 1
+        scrub: 1,    
     }
-})
-.to(nebulaGroup.scale, {
-    x: 0.2, // Shrinking effect
-    y: 0.2,
-    z: 0.2,
-    duration: 3,
-    ease: "linear"
-})
-.to(nebulaSceneCamera.position , {
-    z:2,
-    duration: 3,
-    ease: "linear"
-} , "-=3")
-.to(nebulaRotationSpeed , {
-    x : 0,
-    y : 0,
-    z : 0.001,
-    duration: 1
-} , "-=1")
-.to(initialStar.material , {
-    opacity: 1,
-    duration: 3,
-    ease: "linear",
 
+}).from(scene3Chars, {
+    opacity: 0,
+    y: 50,
+    stagger: 0.05,
+    ease: "power3.out",
+    duration: 1.5
 })
+
+
+
+const starScene = new THREE.Scene();
+const starSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
+
+const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene3-canvas") });
+
+
+starSceneRenderer.setSize( window.innerWidth, window.innerHeight);
+starSceneRenderer.setAnimationLoop( starSceneAnimate );
+
+function starSceneAnimate() {
+
+	starSceneRenderer.render( starScene , starSceneCamera );
+
+}
