@@ -55,11 +55,12 @@ gsap.timeline({
         trigger: "#scenes-wrapper",
         pin:true,
         start: "top top",
-        end: "+=500px",
-        scrub: true
+        end: "bottom top",
+        scrub: 1,
+        
     }
 })
-.to("#main-text, #scroll-indicator", {
+.to("#scene-1", {
     opacity: 0,
     scale: 1.2,
 }, 0)
@@ -79,18 +80,54 @@ const nebulaSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElemen
 nebulaSceneRenderer.setSize( window.innerWidth, window.innerHeight );
 nebulaSceneRenderer.setAnimationLoop( animate );
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
 
-nebulaScene.add( cube );
+
+const particleCount = 1000;
+const nebulaGroup = new THREE.Group(); // Group for better control
+
+for (let i = 0; i < particleCount; i++) {
+    // Create a small sphere
+    const particleGeometry = new THREE.SphereGeometry(0.005, 8, 8); // Tiny spheres
+    const particleMaterial = new THREE.MeshStandardMaterial({
+        emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
+        emissiveIntensity: 0.6, // Slightly stronger glow for effect
+        color: 0x442211, // Darker reddish-brown base
+        transparent: true,
+        opacity: 0.8
+    });
+
+    const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+
+    // Randomly position the particles
+    particle.position.set(
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10
+    );
+
+    nebulaGroup.add(particle);
+}
+
+nebulaScene.add(nebulaGroup);
+
+
+const light = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
+light.position.set(0, 0, 3);
+nebulaScene.add(light);
 
 nebulaSceneCamera.position.z = 5;
 
 function animate() {
 
-	cube.rotation.x += 0.01;
-	cube.rotation.y += 0.01;
+    // Rotate slowly
+    nebulaGroup.rotation.y += 0.0005;
+    nebulaGroup.rotation.x += 0.0003;
+
+    // Slightly move particles up and down
+    nebulaGroup.children.forEach(particle => {
+        particle.position.y += Math.sin(Date.now() * 0.0001 + particle.position.x) * 0.002;
+    });
+
 
 	nebulaSceneRenderer.render( nebulaScene, nebulaSceneCamera );
 
