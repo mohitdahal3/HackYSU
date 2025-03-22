@@ -145,15 +145,13 @@ splitText("#scene-3 > #scene3-texts > .text1")
 splitText("#scene-3 > #scene3-texts > .text2")
 const scene3Chars1 = document.querySelectorAll("#scene-3 > #scene3-texts > .text1 > .char")
 const scene3Chars2 = document.querySelectorAll("#scene-3 > #scene3-texts > .text2 > .char")
-console.log(scene3Chars1)
-console.log(scene3Chars2)
+
 
 gsap.timeline({
     scrollTrigger: {
         trigger: "#scene-3",
-        start: "top 50%",
-        end: "bottom bottom",
-        pin: true,
+        start: "top 65%",
+        end: "bottom 130%",
         scrub: 2,    
     }
 
@@ -172,6 +170,35 @@ gsap.timeline({
 })
 
 
+splitText("#scene-3 > #scene3-texts2 > .text1")
+splitText("#scene-3 > #scene3-texts2 > .text2")
+const scene3Chars3 = document.querySelectorAll("#scene-3 > #scene3-texts2 > .text1 > .char")
+const scene3Chars4 = document.querySelectorAll("#scene-3 > #scene3-texts2 > .text2 > .char")
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-3",
+        start: "top 25%",
+        end: "bottom bottom",
+        scrub: 2,    
+    }
+
+}).from(scene3Chars3, {
+    opacity: 0,
+    y: 50,
+    stagger: 0.05,
+    ease: "power3.out",
+    duration: 1.5
+}).from(scene3Chars4, {
+    opacity: 0,
+    y: 50,
+    stagger: 0.05,
+    ease: "power3.out",
+    duration: 1.5
+})
+
+
 
 const starScene = new THREE.Scene();
 const starSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
@@ -180,8 +207,6 @@ const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementB
 
 starSceneRenderer.setSize( window.innerWidth, window.innerHeight);
 starSceneRenderer.setAnimationLoop( starSceneAnimate );
-
-
 
 
 
@@ -222,7 +247,16 @@ starScene.add(StarSceneLight);
 
 starSceneCamera.position.z = 1;
 
+const initialStarGeometry = new THREE.SphereGeometry(0.35 , 50 , 50)
+const initialStarMaterial = new THREE.MeshStandardMaterial({
+    emissive: new THREE.Color(0xAA5533),
+    emissiveIntensity: 0.9,
+    color: 0x442211,
+})
 
+const initialStar = new THREE.Mesh(initialStarGeometry , initialStarMaterial)
+
+starScene.add(initialStar)
 
 function starSceneAnimate() {
     StarSceneNebulaGroup.rotation.y += nebulaRotationSpeed.y;
@@ -231,3 +265,23 @@ function starSceneAnimate() {
 	starSceneRenderer.render( starScene , starSceneCamera );
 
 }
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-3",
+        start: "top top",
+        end: "bottom top",
+        scrub: 2,
+        pin: "#scene-3"
+    }
+
+}).to(StarSceneNebulaGroup.scale , {
+    x: 0.01,
+    y: 0.01,
+    z: 0.01
+}).from(initialStar.scale , {
+    x:0,
+    y:0,
+    z:0
+} , "-=60%")

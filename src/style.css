@@ -62,6 +62,12 @@ body {
     position: absolute;
     top : 20%;
 }
+#scene-3 > #scene3-texts2{
+    position: absolute;
+    top : 40%;
+}
+
+
 
 
 #main-text {
