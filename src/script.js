@@ -72,7 +72,7 @@ gsap.timeline({
 
 
 const nebulaScene = new THREE.Scene();
-const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.3 , 1000 );
 
 const nebulaSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("nebula-canvas") });
 
@@ -111,21 +111,29 @@ for (let i = 0; i < particleCount; i++) {
     nebulaGroup.add(particle);
 }
 
-nebulaScene.add(nebulaGroup);
+const starGeometry = new THREE.SphereGeometry(5 * 0.2, 30, 30); 
+const starMaterial = new THREE.MeshStandardMaterial({
+    emissive: new THREE.Color(0xAA5533),
+    emissiveIntensity: 0.9, 
+    color: 0x442211, 
+    opacity: 0
+});
+const initialStar = new THREE.Mesh(starGeometry , starMaterial)
+
+nebulaScene.add(nebulaGroup , initialStar);
 
 
 const light = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
-light.position.set(0, 0, 3);
+light.position.set(0, 0, 4);
 nebulaScene.add(light);
 
 nebulaSceneCamera.position.z = 0;
-nebulaSceneCamera.position.x = 0;
-nebulaSceneCamera.position.y = 0;
 
 
 let nebulaRotationSpeed = {
     x : 0.001,
-    y : 0.0007
+    y : 0.0007,
+    z : 0,
 }
 
 function animate() {
@@ -133,6 +141,12 @@ function animate() {
     // Rotate slowly
     nebulaGroup.rotation.y += nebulaRotationSpeed.y;
     nebulaGroup.rotation.x += nebulaRotationSpeed.x;
+    nebulaGroup.rotation.z += nebulaRotationSpeed.z;
+    
+    initialStar.rotation.y += nebulaRotationSpeed.y;
+    initialStar.rotation.x += nebulaRotationSpeed.x;
+    initialStar.rotation.z += nebulaRotationSpeed.z;
+    
 
     // Slightly move particles up and down
     // nebulaGroup.children.forEach(particle => {
@@ -160,14 +174,22 @@ gsap.timeline({
     y: 0.2,
     z: 0.2,
     duration: 3,
-    ease: "power2.inOut"
+    ease: "linear"
 })
 .to(nebulaSceneCamera.position , {
     z:2,
     duration: 3,
     ease: "linear"
-})
+} , "-=3")
 .to(nebulaRotationSpeed , {
-    x : 0.0001,
-    y : 0.0001
+    x : 0,
+    y : 0,
+    z : 0.001,
+    duration: 1
+} , "-=1")
+.to(initialStar.material , {
+    opacity: 1,
+    duration: 3,
+    ease: "linear",
+
 })
