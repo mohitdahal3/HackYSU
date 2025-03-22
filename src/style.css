@@ -51,14 +51,16 @@ body {
 }
 
 #scene-3{
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-#scene-3 > h1{
+#scene-3 > #scene3-texts{
     position: absolute;
+    top : 20%;
 }
 
 

@@ -3,6 +3,12 @@ import * as THREE from 'three'
 
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollSmoother);
+
+ScrollSmoother.create({
+    smooth: 1,
+    effects:true
+})
 
 function splitText(target) {
     let element = document.querySelector(target);
@@ -98,14 +104,11 @@ for (let i = 0; i < particleCount; i++) {
 
     const particle = new THREE.Mesh(particleGeometry, particleMaterial);
 
-    // Randomly position the particles
-    let radius = Math.random() * 5
-    let theta = Math.random() * 2 * Math.PI
-    let phi = Math.random() * 2 * Math.PI
+    
     particle.position.set(
-        radius * Math.sin(phi) * Math.cos(theta),
-        radius * Math.sin(phi) * Math.sin(theta),
-        (radius * Math.cos(phi))
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10
     );
 
     nebulaGroup.add(particle);
@@ -138,19 +141,29 @@ function nebulaSceneAnimate() {
 
 }
 
-splitText("#scene-3 > h1")
-const scene3Chars = document.querySelectorAll("#scene-3 > h1 > .char")
-
+splitText("#scene-3 > #scene3-texts > .text1")
+splitText("#scene-3 > #scene3-texts > .text2")
+const scene3Chars1 = document.querySelectorAll("#scene-3 > #scene3-texts > .text1 > .char")
+const scene3Chars2 = document.querySelectorAll("#scene-3 > #scene3-texts > .text2 > .char")
+console.log(scene3Chars1)
+console.log(scene3Chars2)
 
 gsap.timeline({
     scrollTrigger: {
         trigger: "#scene-3",
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,    
+        start: "top 50%",
+        end: "bottom bottom",
+        pin: true,
+        scrub: 2,    
     }
 
-}).from(scene3Chars, {
+}).from(scene3Chars1, {
+    opacity: 0,
+    y: 50,
+    stagger: 0.05,
+    ease: "power3.out",
+    duration: 1.5
+}).from(scene3Chars2, {
     opacity: 0,
     y: 50,
     stagger: 0.05,
@@ -165,12 +178,56 @@ const starSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (wi
 
 const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene3-canvas") });
 
-
 starSceneRenderer.setSize( window.innerWidth, window.innerHeight);
 starSceneRenderer.setAnimationLoop( starSceneAnimate );
 
-function starSceneAnimate() {
 
+
+
+
+const StarSceneNebulaGroup = new THREE.Group(); // Group for better control
+
+for (let i = 0; i < particleCount; i++) {
+    // Create a small sphere
+    const particleGeometry = new THREE.SphereGeometry(0.005, 10, 10); // Tiny spheres
+    const particleMaterial = new THREE.MeshStandardMaterial({
+        emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
+        emissiveIntensity: 0.9, // Slightly stronger glow for effect
+        color: 0x442211, // Darker reddish-brown base
+        transparent: true,
+        opacity: 0.8
+    });
+
+    const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+
+    // Randomly position the particles
+    let radius = Math.random() * 5
+    let theta = Math.random() * 2 * Math.PI
+    let phi = Math.random() * 2 * Math.PI
+    particle.position.set(
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10
+    );
+
+    StarSceneNebulaGroup.add(particle);
+}
+
+starScene.add(StarSceneNebulaGroup);
+
+
+const StarSceneLight = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
+StarSceneLight.position.set(0, 0, 4);
+starScene.add(StarSceneLight);
+
+starSceneCamera.position.z = 1;
+
+
+
+function starSceneAnimate() {
+    StarSceneNebulaGroup.rotation.y += nebulaRotationSpeed.y;
+    StarSceneNebulaGroup.rotation.x += nebulaRotationSpeed.x;
+    StarSceneNebulaGroup.rotation.z += nebulaRotationSpeed.z;
 	starSceneRenderer.render( starScene , starSceneCamera );
 
 }
