@@ -23,6 +23,7 @@ function addClickListener() {
         if (audio.paused) {
             audio.play();
             btn.classList.add('playing');
+            let isFadedOut = true
             if (isFadedOut) {
                 gsap.to("#audio_btn", { opacity: 1, scale: 1, duration: 0.3 });
                 isFadedOut = false;
@@ -241,7 +242,7 @@ gsap.timeline({
 
 
 const starScene = new THREE.Scene();
-const starSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.3, 1000);
+const starSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.1, 1000);
 
 const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene3-canvas") });
 
@@ -324,36 +325,36 @@ gsap.timeline({
     }
 
 }).to(StarSceneNebulaGroup.scale, {
-    x: 0.03,
-    y: 0.03,
-    z: 0.03,
+    x: 0,
+    y: 0,
+    z: 0,
     duration: 5
 })
-    .from(initialStar.scale, {
-        x: 0,
-        y: 0,
-        z: 0,
-        duration: 5
-    }, "-=70%") // Starts when the first tween is 30% complete
-    .from(scene3Chars5, {
-        opacity: 0,
-        y: 50,
-        duration: 1.5,
-        stagger: 0.05
-    }) // Starts right after the previous tween finishes
+.from(initialStar.scale, {
+    x: 0,
+    y: 0,
+    z: 0,
+    duration: 5
+}, "-=70%") // Starts when the first tween is 30% complete
+.from(scene3Chars5, {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+}) // Starts right after the previous tween finishes
 
-    .to(initialStar.scale, {
-        x: 0.7,
-        y: 0.7,
-        z: 0.7,
-        duration: 5
-    }, "<")
-    .from(scene3Chars6, {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        stagger: 0.05
-    });
+.to(initialStar.scale, {
+    x: 0.7,
+    y: 0.7,
+    z: 0.7,
+    duration: 5
+}, "<")
+.from(scene3Chars6, {
+    opacity: 0,
+    y: 50,
+    duration: 1,
+    stagger: 0.05
+});
 
 
 gsap.timeline({
@@ -370,8 +371,10 @@ gsap.timeline({
 
 splitText("#scene-4 > .text1")
 splitText("#scene-4 > .text2")
+splitText("#scene-4 > .text3")
 const scene4Character1 = document.querySelectorAll("#scene-4 > .text1 > .char")
 const scene4Character2 = document.querySelectorAll("#scene-4 > .text2 > .char")
+const scene4Character3 = document.querySelectorAll("#scene-4 > .text3 > .char")
 
 gsap.timeline({
     scrollTrigger: {
@@ -380,18 +383,85 @@ gsap.timeline({
         end: "bottom top",
         scrub: 1,
         pin: true
-        // markers:true
     }
 })
-    .from(scene4Character1, {
-        opacity: 0,
-        y: 50,
-        duration: 1.5,
-        stagger: 0.05
-    })
-    .from(scene4Character2, {
-        opacity: 0,
-        y: 50,
-        duration: 1.5,
-        stagger: 0.05
-    })
+.from(scene4Character1, {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
+.from(scene4Character2, {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
+.from(scene4Character3, {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
+
+
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-5",
+        start: "top bottom",
+        end: "bottom bottom",
+        scrub: 1,
+    }
+})
+.to("#scene-4" , {
+    opacity:0,
+    duration:0.5
+},"<")
+.to(initialStar.scale , {
+    x: 4,
+    y: 4,
+    z: 4,
+    duration:1
+} , "<")
+.to(StarSceneNebulaGroup.scale , {
+    x: 0,
+    y: 0,
+    z: 0,
+    duration:1
+} , "<")
+
+
+splitText("#scene-5 > .text1")
+splitText("#scene-5 > .text2")
+const scene5Chars1 = document.querySelectorAll("#scene-5 > .text1 > .char")
+const scene5Chars2 = document.querySelectorAll("#scene-5 > .text2 > .char")
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-5",
+        start: "top 50%",
+        end: "top top",
+        scrub: 1,
+    }
+})
+.from(scene5Chars1 , {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
+.from(".equation-image" , {
+    opacity:0,
+    y:50,
+    duration:1.5
+})
+
+.from(scene5Chars2 , {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
