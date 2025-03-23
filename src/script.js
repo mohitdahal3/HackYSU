@@ -1,13 +1,49 @@
 import * as THREE from 'three'
 
 
+// Audio
+const audio = new Audio('src/Super_Nova2.mp3');
+audio.preload = 'auto';
+const btn = document.getElementById('audio_btn');
 
+audio.play()
+    .then(() => {
+
+        btn.classList.add('playing');
+        addClickListener();
+    })
+    .catch(error => {
+
+        console.error("Autoplay failed:", error);
+        addClickListener();
+    });
+
+function addClickListener() {
+    btn.addEventListener('click', function () {
+        if (audio.paused) {
+            audio.play();
+            btn.classList.add('playing');
+            if (isFadedOut) {
+                gsap.to("#audio_btn", { opacity: 1, scale: 1, duration: 0.3 });
+                isFadedOut = false;
+            }
+        } else {
+            audio.pause();
+            btn.classList.remove('playing');
+        }
+    });
+}
+
+
+
+
+//Animation Stuff
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollSmoother);
 
 ScrollSmoother.create({
     smooth: 1,
-    effects:true
+    effects: true
 })
 
 function splitText(target) {
@@ -35,11 +71,11 @@ scene1tl.from(chars, {
     duration: 1.5
 })
 
-// Fade in the scroll indicator right after text animation
-  .from(initialScrollIndicator, {
-    opacity: 0,
-    duration: 1
-} , "-=1")
+    // Fade in the scroll indicator right after text animation
+    .from(initialScrollIndicator, {
+        opacity: 0,
+        duration: 1
+    }, "-=1")
 
 
 const scrollIndicatorTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
@@ -49,42 +85,46 @@ scrollIndicatorTimeline.to(initialScrollIndicator, {
     duration: 0.6,
     ease: "power1.inOut"
 })
-.to(initialScrollIndicator, {
-    y: 0, // Moves it back up
-    duration: 0.6,
-    ease: "power1.inOut"
-});
+    .to(initialScrollIndicator, {
+        y: 0, // Moves it back up
+        duration: 0.6,
+        ease: "power1.inOut"
+    });
 
 
 gsap.timeline({
     scrollTrigger: {
         trigger: "#initial-scenes-wrapper",
-        pin:true,
+        pin: true,
         start: "top top",
         end: "bottom top",
         scrub: 1,
-        
+
     }
 })
-.to("#scene-1", {
-    opacity: 0,
-    scale: 1.2,
-}, 0)
-.to("#scene-2", {
-    opacity: 1,
-}, 0);
+    .to("#scene-1", {
+        opacity: 0,
+        scale: 1.2,
+    }, 0)
+    .to("#audio_btn", {
+        opacity: 0,
+        scale: 1.2,
+    }, 0)
+    .to("#scene-2", {
+        opacity: 1,
+    }, 0);
 
 
 
 
 const nebulaScene = new THREE.Scene();
-const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
+const nebulaSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.3, 1000);
 
 const nebulaSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("nebula-canvas") });
 
 
-nebulaSceneRenderer.setSize( window.innerWidth, window.innerHeight);
-nebulaSceneRenderer.setAnimationLoop( nebulaSceneAnimate );
+nebulaSceneRenderer.setSize(window.innerWidth, window.innerHeight);
+nebulaSceneRenderer.setAnimationLoop(nebulaSceneAnimate);
 
 
 
@@ -104,7 +144,7 @@ for (let i = 0; i < particleCount; i++) {
 
     const particle = new THREE.Mesh(particleGeometry, particleMaterial);
 
-    
+
     particle.position.set(
         (Math.random() - 0.5) * 10,
         (Math.random() - 0.5) * 10,
@@ -125,9 +165,9 @@ nebulaSceneCamera.position.z = 1;
 
 
 let nebulaRotationSpeed = {
-    x : 0.001,
-    y : 0.0007,
-    z : 0,
+    x: 0.001,
+    y: 0.0007,
+    z: 0,
 }
 
 function nebulaSceneAnimate() {
@@ -137,7 +177,7 @@ function nebulaSceneAnimate() {
     nebulaGroup.rotation.x += nebulaRotationSpeed.x;
     nebulaGroup.rotation.z += nebulaRotationSpeed.z;
 
-	nebulaSceneRenderer.render( nebulaScene, nebulaSceneCamera );
+    nebulaSceneRenderer.render(nebulaScene, nebulaSceneCamera);
 
 }
 
@@ -152,7 +192,7 @@ gsap.timeline({
         trigger: "#scene-3",
         start: "top 65%",
         end: "bottom 130%",
-        scrub: 2,    
+        scrub: 2,
     }
 
 }).from(scene3Chars1, {
@@ -181,7 +221,7 @@ gsap.timeline({
         trigger: "#scene-3",
         start: "top 25%",
         end: "bottom bottom",
-        scrub: 1,    
+        scrub: 1,
     }
 
 }).from(scene3Chars3, {
@@ -201,12 +241,12 @@ gsap.timeline({
 
 
 const starScene = new THREE.Scene();
-const starSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
+const starSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.3, 1000);
 
 const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene3-canvas") });
 
-starSceneRenderer.setSize( window.innerWidth, window.innerHeight);
-starSceneRenderer.setAnimationLoop( starSceneAnimate );
+starSceneRenderer.setSize(window.innerWidth, window.innerHeight);
+starSceneRenderer.setAnimationLoop(starSceneAnimate);
 
 
 
@@ -247,14 +287,14 @@ starScene.add(StarSceneLight);
 
 starSceneCamera.position.z = 1;
 
-const initialStarGeometry = new THREE.SphereGeometry(0.35 , 50 , 50)
+const initialStarGeometry = new THREE.SphereGeometry(0.35, 50, 50)
 const initialStarMaterial = new THREE.MeshStandardMaterial({
     emissive: new THREE.Color(0xAA5533),
     emissiveIntensity: 0.9,
     color: 0x442211,
 })
 
-const initialStar = new THREE.Mesh(initialStarGeometry , initialStarMaterial)
+const initialStar = new THREE.Mesh(initialStarGeometry, initialStarMaterial)
 
 starScene.add(initialStar)
 
@@ -262,7 +302,7 @@ function starSceneAnimate() {
     StarSceneNebulaGroup.rotation.y += nebulaRotationSpeed.y;
     StarSceneNebulaGroup.rotation.x += nebulaRotationSpeed.x;
     StarSceneNebulaGroup.rotation.z += nebulaRotationSpeed.z;
-	starSceneRenderer.render( starScene , starSceneCamera );
+    starSceneRenderer.render(starScene, starSceneCamera);
 
 }
 
@@ -288,32 +328,32 @@ gsap.timeline({
     y: 0.03,
     z: 0.03,
     duration: 5
-  })
-  .from(initialStar.scale, {
-    x: 0,
-    y: 0,
-    z: 0,
-    duration: 5
-  }, "-=70%") // Starts when the first tween is 30% complete
-  .from(scene3Chars5, {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-  }) // Starts right after the previous tween finishes
+})
+    .from(initialStar.scale, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 5
+    }, "-=70%") // Starts when the first tween is 30% complete
+    .from(scene3Chars5, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    }) // Starts right after the previous tween finishes
 
-  .to(initialStar.scale , {
-    x:0.7,
-    y:0.7,
-    z:0.7,
-    duration: 5
-  } , "<")
-  .from(scene3Chars6, {
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    stagger: 0.05
-  });
+    .to(initialStar.scale, {
+        x: 0.7,
+        y: 0.7,
+        z: 0.7,
+        duration: 5
+    }, "<")
+    .from(scene3Chars6, {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        stagger: 0.05
+    });
 
 
 gsap.timeline({
@@ -339,19 +379,19 @@ gsap.timeline({
         start: "top top",
         end: "bottom top",
         scrub: 1,
-        pin:true
+        pin: true
         // markers:true
     }
 })
-.from(scene4Character1 , {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
-.from(scene4Character2 , {
-    opacity:0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
+    .from(scene4Character1, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
+    .from(scene4Character2, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
