@@ -181,7 +181,7 @@ gsap.timeline({
         trigger: "#scene-3",
         start: "top 25%",
         end: "bottom bottom",
-        scrub: 2,    
+        scrub: 1,    
     }
 
 }).from(scene3Chars3, {
@@ -278,7 +278,7 @@ gsap.timeline({
         trigger: "#scene-3",
         start: "top top",
         end: "bottom -200%",
-        scrub: 2,
+        scrub: 1,
         pin: "#scene-3",
         // markers:true
     }
@@ -314,3 +314,44 @@ gsap.timeline({
     duration: 1,
     stagger: 0.05
   });
+
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-4",
+        start: "top bottom",
+        end: "bottom boottom",
+        scrub: 1,
+        pin: "#scene3-canvas",
+        // markers:true
+    }
+})
+
+
+splitText("#scene-4 > .text1")
+splitText("#scene-4 > .text2")
+const scene4Character1 = document.querySelectorAll("#scene-4 > .text1 > .char")
+const scene4Character2 = document.querySelectorAll("#scene-4 > .text2 > .char")
+
+gsap.timeline({
+    scrollTrigger: {
+        trigger: "#scene-4",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1,
+        pin:true
+        // markers:true
+    }
+})
+.from(scene4Character1 , {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
+.from(scene4Character2 , {
+    opacity:0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+})
