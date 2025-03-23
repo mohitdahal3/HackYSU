@@ -267,21 +267,50 @@ function starSceneAnimate() {
 }
 
 
+splitText("#scene-3 > #scene3-texts3 > .text1")
+splitText("#scene-3 > #scene3-texts3 > .text2")
+const scene3Chars5 = document.querySelectorAll("#scene-3 > #scene3-texts3 > .text1 > .char")
+const scene3Chars6 = document.querySelectorAll("#scene-3 > #scene3-texts3 > .text2 > .char")
+
+
 gsap.timeline({
     scrollTrigger: {
         trigger: "#scene-3",
         start: "top top",
-        end: "bottom top",
+        end: "bottom -200%",
         scrub: 2,
-        pin: "#scene-3"
+        pin: "#scene-3",
+        // markers:true
     }
 
-}).to(StarSceneNebulaGroup.scale , {
-    x: 0.01,
-    y: 0.01,
-    z: 0.01
-}).from(initialStar.scale , {
-    x:0,
-    y:0,
-    z:0
-} , "-=60%")
+}).to(StarSceneNebulaGroup.scale, {
+    x: 0.03,
+    y: 0.03,
+    z: 0.03,
+    duration: 5
+  })
+  .from(initialStar.scale, {
+    x: 0,
+    y: 0,
+    z: 0,
+    duration: 5
+  }, "-=70%") // Starts when the first tween is 30% complete
+  .from(scene3Chars5, {
+    opacity: 0,
+    y: 50,
+    duration: 1.5,
+    stagger: 0.05
+  }) // Starts right after the previous tween finishes
+
+  .to(initialStar.scale , {
+    x:0.7,
+    y:0.7,
+    z:0.7,
+    duration: 5
+  } , "<")
+  .from(scene3Chars6, {
+    opacity: 0,
+    y: 50,
+    duration: 1,
+    stagger: 0.05
+  });
