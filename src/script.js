@@ -132,11 +132,16 @@ nebulaSceneRenderer.setAnimationLoop(nebulaSceneAnimate);
 const particleCount = 5000;
 const nebulaGroup = new THREE.Group(); // Group for better control
 
+const colors = ["red", "green", "blue", "cyan", "yellow", "purple"]
+
 for (let i = 0; i < particleCount; i++) {
+
+    let c = colors[i % colors.length]
+
     // Create a small sphere
     const particleGeometry = new THREE.SphereGeometry(0.005, 10, 10); // Tiny spheres
     const particleMaterial = new THREE.MeshStandardMaterial({
-        emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
+        emissive: new THREE.Color(c), // Warm reddish-brown glow
         emissiveIntensity: 0.9, // Slightly stronger glow for effect
         color: 0x442211, // Darker reddish-brown base
         transparent: true,
@@ -254,10 +259,13 @@ starSceneRenderer.setAnimationLoop(starSceneAnimate);
 const StarSceneNebulaGroup = new THREE.Group(); // Group for better control
 
 for (let i = 0; i < particleCount; i++) {
+
+    let c = colors[i % colors.length]
+
     // Create a small sphere
     const particleGeometry = new THREE.SphereGeometry(0.005, 10, 10); // Tiny spheres
     const particleMaterial = new THREE.MeshStandardMaterial({
-        emissive: new THREE.Color(0xAA5533), // Warm reddish-brown glow
+        emissive: new THREE.Color(c), // Warm reddish-brown glow
         emissiveIntensity: 0.9, // Slightly stronger glow for effect
         color: 0x442211, // Darker reddish-brown base
         transparent: true,
@@ -282,17 +290,17 @@ for (let i = 0; i < particleCount; i++) {
 starScene.add(StarSceneNebulaGroup);
 
 
-const StarSceneLight = new THREE.PointLight(0xFFAA88, 2, 20); // Warm orange glow
-StarSceneLight.position.set(0, 0, 4);
+const StarSceneLight = new THREE.PointLight(0xFFFFFF, 2, 20); // Warm orange glow
+StarSceneLight.position.set(-1, 2, 4);
 starScene.add(StarSceneLight);
 
 starSceneCamera.position.z = 1;
 
-const initialStarGeometry = new THREE.SphereGeometry(0.35, 50, 50)
-const initialStarMaterial = new THREE.MeshStandardMaterial({
-    emissive: new THREE.Color(0xAA5533),
-    emissiveIntensity: 0.9,
-    color: 0x442211,
+const initialStarGeometry = new THREE.SphereGeometry(0.35,)
+const initialStarMaterial = new THREE.MeshPhongMaterial({
+    emissive: new THREE.Color(0xd5850e),
+    emissiveIntensity: 0.6,
+    color: 0xffffff,
 })
 
 const initialStar = new THREE.Mesh(initialStarGeometry, initialStarMaterial)
@@ -303,6 +311,8 @@ function starSceneAnimate() {
     StarSceneNebulaGroup.rotation.y += nebulaRotationSpeed.y;
     StarSceneNebulaGroup.rotation.x += nebulaRotationSpeed.x;
     StarSceneNebulaGroup.rotation.z += nebulaRotationSpeed.z;
+
+
     starSceneRenderer.render(starScene, starSceneCamera);
 
 }
@@ -330,31 +340,31 @@ gsap.timeline({
     z: 0,
     duration: 5
 })
-.from(initialStar.scale, {
-    x: 0,
-    y: 0,
-    z: 0,
-    duration: 5
-}, "-=70%") // Starts when the first tween is 30% complete
-.from(scene3Chars5, {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-}) // Starts right after the previous tween finishes
+    .from(initialStar.scale, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 5
+    }, "-=70%") // Starts when the first tween is 30% complete
+    .from(scene3Chars5, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    }) // Starts right after the previous tween finishes
 
-.to(initialStar.scale, {
-    x: 0.7,
-    y: 0.7,
-    z: 0.7,
-    duration: 5
-}, "<")
-.from(scene3Chars6, {
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    stagger: 0.05
-});
+    .to(initialStar.scale, {
+        x: 0.7,
+        y: 0.7,
+        z: 0.7,
+        duration: 5
+    }, "<")
+    .from(scene3Chars6, {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        stagger: 0.05
+    });
 
 
 gsap.timeline({
@@ -385,24 +395,24 @@ gsap.timeline({
         pin: true
     }
 })
-.from(scene4Character1, {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
-.from(scene4Character2, {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
-.from(scene4Character3, {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
+    .from(scene4Character1, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
+    .from(scene4Character2, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
+    .from(scene4Character3, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
 
 
 
@@ -415,22 +425,22 @@ gsap.timeline({
         scrub: 1,
     }
 })
-.to("#scene-4" , {
-    opacity:0,
-    duration:0.5
-},"<")
-.to(initialStar.scale , {
-    x: 4,
-    y: 4,
-    z: 4,
-    duration:1
-} , "<")
-.to(StarSceneNebulaGroup.scale , {
-    x: 0,
-    y: 0,
-    z: 0,
-    duration:1
-} , "<")
+    .to("#scene-4", {
+        opacity: 0,
+        duration: 0.5
+    }, "<")
+    .to(initialStar.scale, {
+        x: 4,
+        y: 4,
+        z: 4,
+        duration: 1
+    }, "<")
+    .to(StarSceneNebulaGroup.scale, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 1
+    }, "<")
 
 
 splitText("#scene-5 > .text1")
@@ -447,21 +457,21 @@ gsap.timeline({
         scrub: 1,
     }
 })
-.from(scene5Chars1 , {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
-.from(".equation-image" , {
-    opacity:0,
-    y:50,
-    duration:1.5
-})
+    .from(scene5Chars1, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
+    .from(".equation-image", {
+        opacity: 0,
+        y: 50,
+        duration: 1.5
+    })
 
-.from(scene5Chars2 , {
-    opacity: 0,
-    y: 50,
-    duration: 1.5,
-    stagger: 0.05
-})
+    .from(scene5Chars2, {
+        opacity: 0,
+        y: 50,
+        duration: 1.5,
+        stagger: 0.05
+    })
