@@ -1,40 +1,48 @@
 import * as THREE from 'three'
 
 
-const audio = new Audio('Super_Nova.mp3');
-      audio.preload = 'auto';
-      const mainText = document.getElementById('btn');
+// Audio
+const audio = new Audio('src/Super_Nova2.mp3');
+audio.preload = 'auto';
+const btn = document.getElementById('audio_btn');
 
-      audio.play()
-        .then(() => {
-          mainText.classList.add('playing');
-          addClickListener();
-        })
-        .catch(error =>{
-          console.error("Autoplay failed:", error);
-          addClickListener();
-        });
+audio.play()
+    .then(() => {
 
-    function addClickListener(){
-      mainText.addEventListener('click', function(){
-        if (audio.paused){
-          audio.play();
-          mainText.classList.add('playing');
-        }else{
-          audio.pause();
-          audio.currentTime = 0;
-          mainText.classList.remove('playing');
+        btn.classList.add('playing');
+        addClickListener();
+    })
+    .catch(error => {
+
+        console.error("Autoplay failed:", error);
+        addClickListener();
+    });
+
+function addClickListener() {
+    btn.addEventListener('click', function () {
+        if (audio.paused) {
+            audio.play();
+            btn.classList.add('playing');
+            btn.innerHTML = "Audio On"
+        } else {
+            audio.pause();
+            audio.currentTime = 0;
+            btn.classList.remove('playing');
+            btn.innerHTML = "Audio Off"
         }
-      });
-    }
+    });
+}
 
 
+
+
+//Animation Stuff
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(ScrollSmoother);
 
 ScrollSmoother.create({
     smooth: 1,
-    effects:true
+    effects: true
 })
 
 function splitText(target) {
@@ -62,11 +70,11 @@ scene1tl.from(chars, {
     duration: 1.5
 })
 
-// Fade in the scroll indicator right after text animation
-  .from(initialScrollIndicator, {
-    opacity: 0,
-    duration: 1
-} , "-=1")
+    // Fade in the scroll indicator right after text animation
+    .from(initialScrollIndicator, {
+        opacity: 0,
+        duration: 1
+    }, "-=1")
 
 
 const scrollIndicatorTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
@@ -76,42 +84,42 @@ scrollIndicatorTimeline.to(initialScrollIndicator, {
     duration: 0.6,
     ease: "power1.inOut"
 })
-.to(initialScrollIndicator, {
-    y: 0, // Moves it back up
-    duration: 0.6,
-    ease: "power1.inOut"
-});
+    .to(initialScrollIndicator, {
+        y: 0, // Moves it back up
+        duration: 0.6,
+        ease: "power1.inOut"
+    });
 
 
 gsap.timeline({
     scrollTrigger: {
         trigger: "#initial-scenes-wrapper",
-        pin:true,
+        pin: true,
         start: "top top",
         end: "bottom top",
         scrub: 1,
-        
+
     }
 })
-.to("#scene-1", {
-    opacity: 0,
-    scale: 1.2,
-}, 0)
-.to("#scene-2", {
-    opacity: 1,
-}, 0);
+    .to("#scene-1", {
+        opacity: 0,
+        scale: 1.2,
+    }, 0)
+    .to("#scene-2", {
+        opacity: 1,
+    }, 0);
 
 
 
 
 const nebulaScene = new THREE.Scene();
-const nebulaSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
+const nebulaSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.3, 1000);
 
 const nebulaSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("nebula-canvas") });
 
 
-nebulaSceneRenderer.setSize( window.innerWidth, window.innerHeight);
-nebulaSceneRenderer.setAnimationLoop( nebulaSceneAnimate );
+nebulaSceneRenderer.setSize(window.innerWidth, window.innerHeight);
+nebulaSceneRenderer.setAnimationLoop(nebulaSceneAnimate);
 
 
 
@@ -131,7 +139,7 @@ for (let i = 0; i < particleCount; i++) {
 
     const particle = new THREE.Mesh(particleGeometry, particleMaterial);
 
-    
+
     particle.position.set(
         (Math.random() - 0.5) * 10,
         (Math.random() - 0.5) * 10,
@@ -152,9 +160,9 @@ nebulaSceneCamera.position.z = 1;
 
 
 let nebulaRotationSpeed = {
-    x : 0.001,
-    y : 0.0007,
-    z : 0,
+    x: 0.001,
+    y: 0.0007,
+    z: 0,
 }
 
 function nebulaSceneAnimate() {
@@ -164,7 +172,7 @@ function nebulaSceneAnimate() {
     nebulaGroup.rotation.x += nebulaRotationSpeed.x;
     nebulaGroup.rotation.z += nebulaRotationSpeed.z;
 
-	nebulaSceneRenderer.render( nebulaScene, nebulaSceneCamera );
+    nebulaSceneRenderer.render(nebulaScene, nebulaSceneCamera);
 
 }
 
@@ -181,7 +189,7 @@ gsap.timeline({
         start: "top 50%",
         end: "bottom bottom",
         pin: true,
-        scrub: 2,    
+        scrub: 2,
     }
 
 }).from(scene3Chars1, {
@@ -201,12 +209,12 @@ gsap.timeline({
 
 
 const starScene = new THREE.Scene();
-const starSceneCamera = new THREE.PerspectiveCamera( 75, window.innerWidth / (window.innerHeight), 0.3 , 1000 );
+const starSceneCamera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight), 0.3, 1000);
 
 const starSceneRenderer = new THREE.WebGLRenderer({ canvas: document.getElementById("scene3-canvas") });
 
-starSceneRenderer.setSize( window.innerWidth, window.innerHeight);
-starSceneRenderer.setAnimationLoop( starSceneAnimate );
+starSceneRenderer.setSize(window.innerWidth, window.innerHeight);
+starSceneRenderer.setAnimationLoop(starSceneAnimate);
 
 
 
@@ -255,6 +263,6 @@ function starSceneAnimate() {
     StarSceneNebulaGroup.rotation.y += nebulaRotationSpeed.y;
     StarSceneNebulaGroup.rotation.x += nebulaRotationSpeed.x;
     StarSceneNebulaGroup.rotation.z += nebulaRotationSpeed.z;
-	starSceneRenderer.render( starScene , starSceneCamera );
+    starSceneRenderer.render(starScene, starSceneCamera);
 
 }

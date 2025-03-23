@@ -5,23 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/style.css">
     <title>Life Cycle of a Star</title>
-    <style>
-
-        #audio-control-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        #main-text.playing {
-          color: gold;
-
-        }
-    </style>
   </head>
 
   <body>
@@ -30,10 +13,11 @@
 
         <div id="initial-scenes-wrapper">
     
+          <button id="audio_btn">Audio Off</button>
+
           <section id="scene-1">
-          <div id="audio-control-overlay"></div>
-          <h1 id="main-text" role="button" class="text-white">The Life Cycle of a Star</h1>
-          <div id="scroll-indicator" >Scroll Down ⬇️</div>
+            <h1 id="main-text" class="text-white">The Life Cycle of a Star</h1>
+            <div id="scroll-indicator" >Scroll Down ⬇️</div>
           </section>
       
           <section id="scene-2">
@@ -68,37 +52,5 @@
 
 
     <script type="module" src="src/script.js"></script>
-
-    <script>
-        const audio = new Audio('src/Super_Nova.mp3');
-        audio.preload = 'auto';
-        const mainText = document.getElementById('main-text');
-        const overlay = document.getElementById('audio-control-overlay');
-
-        audio.play()
-            .then(() => {
-
-              mainText.classList.add('playing');
-              addClickListener();
-            })
-            .catch(error => {
-
-              console.error("Autoplay failed:", error);
-              addClickListener();
-            });
-          
-        function addClickListener(){
-            overlay.addEventListener('click', function(){
-                if (audio.paused){
-                    audio.play();
-                    mainText.classList.add('playing');
-                }else{
-                    audio.pause();
-                    audio.currentTime = 0;
-                    mainText.classList.remove('playing');
-                }
-            });
-        }
-    </script>
   </body>
 </html>
