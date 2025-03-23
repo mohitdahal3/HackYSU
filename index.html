@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="src/style.css">
     <title>Life Cycle of a Star</title>
+    <style>
+
+      #audio_btn{
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          position: fixed;
+          top: 10px;
+          left: 10px;
+          z-index: 1000;
+      }
+
+      #audio_btn img{
+          width: 50px;
+          height: auto;
+          display: block;
+      }
+
+      #audio_btn.playing{
+          opacity: 0.5;
+      }
+
+    </style>
   </head>
 
   <body>
@@ -12,14 +36,15 @@
       <div id="smooth-content">
 
         <div id="initial-scenes-wrapper">
-    
-          <button id="audio_btn">Audio Off</button>
-
+          
           <section id="scene-1">
+            <button id="audio_btn">
+              <img src="src/audio_btn.png" alt="Toggle Audio">
+          </button>
             <h1 id="main-text" class="text-white">The Life Cycle of a Star</h1>
             <div id="scroll-indicator" >Scroll Down ⬇️</div>
           </section>
-      
+          
           <section id="scene-2">
             <canvas id="nebula-canvas"></canvas>
           </section>

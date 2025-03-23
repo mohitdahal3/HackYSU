@@ -23,12 +23,13 @@ function addClickListener() {
         if (audio.paused) {
             audio.play();
             btn.classList.add('playing');
-            btn.innerHTML = "Audio On"
+        if (isFadedOut){
+            gsap.to("#audio_btn", { opacity: 1, scale: 1, duration: 0.3 });
+            isFadedOut = false;
+        }
         } else {
             audio.pause();
-            audio.currentTime = 0;
             btn.classList.remove('playing');
-            btn.innerHTML = "Audio Off"
         }
     });
 }
@@ -102,6 +103,10 @@ gsap.timeline({
     }
 })
     .to("#scene-1", {
+        opacity: 0,
+        scale: 1.2,
+    }, 0)
+    .to("#audio_btn", {
         opacity: 0,
         scale: 1.2,
     }, 0)
